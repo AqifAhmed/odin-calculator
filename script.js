@@ -97,19 +97,15 @@ document.addEventListener('keydown', handleKeyPress);
 function handleKeyPress(e) {
     const key = e.key;
 
-    // Allow number keys and decimal
     if (!isNaN(key) || key === '.') {
         pressButton(key);
     }
 
-    // Allow operators and special keys
     if (['+', '-', '*', '/', 'Enter', '=', 'Backspace', 'Escape'].includes(key)) {
         if (key === 'Enter' || key === '=') {
             pressButton('=');
         } else if (key === 'Escape') {
             pressButton('AC');
-        } else if (key === 'Backspace') {
-            // Optional: Implement custom backspace logic
         } else {
             pressButton(key);
         }
