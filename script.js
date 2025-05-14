@@ -96,21 +96,32 @@ document.addEventListener('keydown', handleKeyPress);
 
 function handleKeyPress(e) {
     const key = e.key;
+    
+    const keyMap = {
+        '/': '÷',
+        '*': '*',
+        '+': '+',
+        '-': '-',
+        '=': '=',
+        'Enter': '=',
+        'Escape': 'AC',
+        '.': '.',
+    };
 
-    if (!isNaN(key) || key === '.') {
+    if (!isNaN(key)) {
         pressButton(key);
     }
 
-    if (['+', '-', '*', '/', 'Enter', '=', 'Backspace', 'Escape'].includes(key)) {
-        if (key === 'Enter' || key === '=') {
-            pressButton('=');
-        } else if (key === 'Escape') {
-            pressButton('AC');
-        } else {
-            pressButton(key);
-        }
+    else if (key in keyMap) {
+        pressButton(keyMap[key]);
+    }
+
+    else if (key === 'Backspace') {
+        const display = document.querySelector('.output');
+        display.textContent = display.textContent.slice(0, -1) || '0';
     }
 }
+
 
 function pressButton(value) {
     const button = [...document.querySelectorAll('button')].find(
