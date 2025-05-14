@@ -85,3 +85,9 @@ body {
 button {
     border: none;
 }
+
+@media (min-width: 600px) {
+    .calculator {
+        padding-bottom: 20px;
+    }
+}
