@@ -1,4 +1,4 @@
-# odin-calculator
+# Odin-Calculator
 
 ![Screenshot 2025-05-15 133116](https://github.com/user-attachments/assets/42aafef6-7685-4836-8b35-46e48eaaedf2)
 
