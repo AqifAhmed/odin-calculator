@@ -10,6 +10,8 @@ keys.forEach(key => {
 
         if (value === 'AC') {
             output.innerHTML = '0';
+        } else if (value === 'C') {
+            output.innerHTML = output.innerHTML.slice(0, -1) || '0';
         } else {
             if (output.innerHTML === '0') {
                 output.innerHTML = value;
@@ -96,7 +98,7 @@ document.addEventListener('keydown', handleKeyPress);
 
 function handleKeyPress(e) {
     const key = e.key;
-    
+
     const keyMap = {
         '/': '÷',
         '*': '*',
