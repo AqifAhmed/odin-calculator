@@ -1,4 +1,5 @@
 const output = document.querySelector('.output');
+const expression = document.querySelector('.expression');
 const keys = document.querySelectorAll('.key');
 const operator = document.querySelectorAll('.operator');
 const enter = document.querySelector('.enter');
@@ -9,23 +10,28 @@ keys.forEach(key => {
         const value = key.value;
 
         if (value === 'AC') {
-            output.innerHTML = '0';
+            output.textContent = '0';
+            expression.textContent = '';
         } else if (value === 'C') {
-            output.innerHTML = output.innerHTML.slice(0, -1) || '0';
+            output.textContent = output.textContent.slice(0, -1) || '0';
+            expression.textContent = output.textContent === '0' ? '' : output.textContent;
         } else {
-            if (output.innerHTML === '0') {
-                output.innerHTML = value;
+            if (output.textContent === '0') {
+                output.textContent = value;
             } else {
-                output.innerHTML += value;
+                output.textContent += value;
             }
+            expression.textContent = '';
         }
+        adjustFontSize();
     });
 });
 
 decimal.addEventListener("click", () => {
-    if (!output.innerHTML.includes('.')) {
-        output.innerHTML += decimal.value;
+    if (!output.textContent.includes('.')) {
+        output.textContent += decimal.value;
     }
+    adjustFontSize();
 })
 
 enter.addEventListener("click", () => {
@@ -36,61 +42,48 @@ operator.forEach(op => {
     op.addEventListener("click", () => {
         const value = op.value;
         evaluate();
-        if (!output.innerHTML.includes("+") && !output.innerHTML.includes("-") && !output.innerHTML.includes("*") && !output.innerHTML.includes("÷")) {
-            output.innerHTML += value;
+        if (!output.textContent.includes("+") && !output.textContent.includes("-") && !output.textContent.includes("*") && !output.textContent.includes("÷")) {
+            output.textContent += value;
         }
+        adjustFontSize();
     })
 });
 
+function formatResult(num) {
+    return Number.isInteger(num) ? String(num) : num.toFixed(1);
+}
+
 function evaluate() {
+    const operators = ['+', '-', '*', '÷'];
+    const ops = operators.filter(op => output.textContent.includes(op));
+    if (ops.length === 0) return;
 
-    if (output.innerHTML.includes("+")) {
+    const op = ops[0];
+    const array = output.textContent.split(op);
+    if (array.length < 2 || array[1] === '') return;
 
-        const array = output.innerHTML.split("+");
-        if (array[1] !== '') {
-            const out = parseFloat(array[0]) + parseFloat(array[1]);
-            if (Number.isInteger(out)) {
-                output.innerHTML = out;
-            } else {
-                output.innerHTML = out.toFixed(1);
-            }
-        }
+    const a = parseFloat(array[0]);
+    const b = parseFloat(array[1]);
+    let result;
 
-    } else if (output.innerHTML.includes("-")) {
+    if (op === '+') result = a + b;
+    else if (op === '-') result = a - b;
+    else if (op === '*') result = a * b;
+    else if (op === '÷') result = a / b;
 
-        const array = output.innerHTML.split("-");
-        if (array[1] !== '') {
-            const out = parseFloat(array[0]) - parseFloat(array[1]);
-            if (Number.isInteger(out)) {
-                output.innerHTML = out;
-            } else {
-                output.innerHTML = out.toFixed(1);
-            }
-        }
+    expression.textContent = output.textContent + ' =';
+    output.textContent = formatResult(result);
+    adjustFontSize();
+}
 
-    } else if (output.innerHTML.includes("*")) {
-
-        const array = output.innerHTML.split("*");
-        if (array[1] !== '') {
-            const out = parseFloat(array[0]) * parseFloat(array[1]);
-            if (Number.isInteger(out)) {
-                output.innerHTML = out;
-            } else {
-                output.innerHTML = out.toFixed(1);
-            }
-        }
-
-    } else if (output.innerHTML.includes("÷")) {
-
-        const array = output.innerHTML.split("÷");
-        if (array[1] !== '') {
-            const out = parseFloat(array[0]) / parseFloat(array[1]);
-            if (Number.isInteger(out)) {
-                output.innerHTML = out;
-            } else {
-                output.innerHTML = out.toFixed(1);
-            }
-        }
+function adjustFontSize() {
+    const len = output.textContent.length;
+    if (len > 12) {
+        output.style.fontSize = '24px';
+    } else if (len > 8) {
+        output.style.fontSize = '32px';
+    } else {
+        output.style.fontSize = '';
     }
 }
 
@@ -110,17 +103,14 @@ function handleKeyPress(e) {
         '.': '.',
     };
 
-    if (!isNaN(key)) {
+    if (/^\d$/.test(key)) {
         pressButton(key);
-    }
-
-    else if (key in keyMap) {
+    } else if (key in keyMap) {
         pressButton(keyMap[key]);
-    }
-
-    else if (key === 'Backspace') {
-        const display = document.querySelector('.output');
-        display.textContent = display.textContent.slice(0, -1) || '0';
+    } else if (key === 'Backspace') {
+        output.textContent = output.textContent.slice(0, -1) || '0';
+        expression.textContent = output.textContent === '0' ? '' : output.textContent;
+        adjustFontSize();
     }
 }
 
@@ -133,3 +123,5 @@ function pressButton(value) {
         button.click();
     }
 }
+
+
