@@ -1,91 +1,182 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #1a1a2e;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .calculator {
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    border-radius: 10px;
-    width: 300px;
-    height: 450px;
+    width: 320px;
+    border-radius: 24px;
+    background: #16213e;
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    background-color: rgb(255, 255, 255);
-    overflow: hidden;
-    border: 5px solid black;
-    padding-bottom: 10px;
-    padding-right: 10px;
+}
+
+/* Display area */
+.display {
+    padding: 24px 24px 16px;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 4px;
+    background: #0f3460;
+}
+
+.expression {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.45);
+    min-height: 20px;
+    word-break: break-all;
+    text-align: right;
+    letter-spacing: 0.5px;
 }
 
 .output {
+    font-size: 48px;
+    font-weight: 300;
+    color: #ffffff;
     text-align: right;
-    font-size: 50px;
-    background-color: transparent;
-    padding-right: 20px;
-    padding-top: 10px;
-    padding-bottom: 20px;
-    color: black;
+    word-break: break-all;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    transition: font-size 0.1s ease;
 }
 
+/* Key grid */
 .keys {
-    padding-left: 10px;
-    gap: 3px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    flex-wrap: wrap;
+    gap: 12px;
+    padding: 20px;
+    background: #16213e;
 }
 
-.key {
-    height: 70px;
-    width: 70px;
-    border-radius: 30px;
-    background: transparent;
-    background-color: gray;
-    color: white;
-    font-size: large;
-}
-
-.operator.plus{
-    grid-row: span 2;
-    height: 140px;
-}
-
-.ac, .c {
-    background-color: black;
-    color: white;
-}
-
-.operator, .decimal, .enter {
-    height: 70px;
-    width: 70px;
-    border-radius: 30px;
-    background: transparent;
-    background-color:black;
-    color: white;
-    font-size: x-large;
-}
-
-.decimal {
-    font-size: xx-large;
-}
-
-.enter {
-    grid-column: span 2;
-    width: 140px;
-}
-
+/* Base button styles */
 button {
     border: none;
+    cursor: pointer;
+    border-radius: 16px;
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: 500;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s ease, filter 0.1s ease, box-shadow 0.1s ease;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
-@media (max-width: 600px) {
+button:hover {
+    filter: brightness(1.15);
+}
+
+button:active {
+    transform: scale(0.93);
+    filter: brightness(0.9);
+}
+
+/* Number keys */
+.key {
+    background: #1f4068;
+    color: #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Operator keys */
+.operator {
+    background: #e94560;
+    color: #ffffff;
+    font-size: 22px;
+    box-shadow: 0 4px 6px rgba(233, 69, 96, 0.35);
+}
+
+/* AC key */
+.ac {
+    background: #e94560;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(233, 69, 96, 0.35);
+}
+
+/* C (backspace) key */
+.c {
+    background: #2a3f5f;
+    color: #94a3b8;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Plus spans two rows */
+.operator.plus {
+    grid-row: span 2;
+    height: auto;
+    min-height: 140px;
+    border-radius: 32px;
+}
+
+/* Decimal key */
+.decimal {
+    background: #1f4068;
+    color: #e2e8f0;
+    font-size: 28px;
+    font-weight: 700;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Equals key */
+.enter {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    font-size: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.enter:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.55);
+}
+
+/* Responsive */
+@media (max-width: 400px) {
     .calculator {
-        padding-bottom: 20px;
+        width: 100vw;
+        border-radius: 0;
     }
-    .output{
-        padding-top: 20px;
+
+    .keys {
+        gap: 8px;
+        padding: 16px;
+    }
+
+    button {
+        height: 58px;
+        font-size: 18px;
+    }
+
+    .output {
+        font-size: 40px;
     }
 }
